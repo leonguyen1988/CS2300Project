@@ -1,0 +1,17 @@
+{
+  "name": "express",
+  "version": "4.16.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "check-dependencies": "^1.1.0",
+    "ejs": "^2.6.1",
+    "mysql": "^2.16.0"
+  }
+}
