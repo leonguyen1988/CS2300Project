@@ -64,19 +64,7 @@ var tutorial1='<b>SQL Tutorial 1: Table Creation</b>'+
 '<br>DEPTNO		    INTEGER,'+
 '<br>FOREIGN_KEY(DEPTNO) REFERENCES DEPARTMENT'+
 '<br>);'+
-'<br>So it looks like this: FOREIGN KEY (variable name) REFERENCES TABLENAME'+
-'<br><br>Question:<br>'+
-'Is this a valid table creation command?'+
-'<br>CREATE TABLE DOG('+
-	'<br>BREED		    STRING NOT NULL,'+
-	'<br>NAME			STRING PRIMARY KEY,'+
-	'<br>SEX			CHAR(1),'+
-	'<br>RABIES_SHOT	BOOLEAN,'+
-	'<br>OWNER		    STRING,'+
-	'<br>PET_ID		    INTEGER PRIMARY KEY'+
-'<br>);'+
-'<br>Yes			No'+
-'<br>No. The table was created with two primary keys and did not use the second method discussed to declare them as a compound key.</p>';
+'<br>So it looks like this: FOREIGN KEY (variable name) REFERENCES TABLENAME';
 
 var tutorial2 = '<b>SQL Tutorial 2: Table Operations</b>'+
 '<h2>Table Operations : </h2><br>'+
@@ -111,13 +99,7 @@ var tutorial2 = '<b>SQL Tutorial 2: Table Operations</b>'+
 '<br>UPDATE EMPLOYEE'+
 	'<br>   SET SALARY = 100000'+
 	'<br>   WHERE SALARY < 100000;'+
-'<br>DELETE FROM EMPLOYEE;'+
-
-'What values are stored in the EMPLOYEE table after these queries have run?'+
-'Nothing	OR	(050, ‘James’, ‘M’, 20000, 01)& (020, NULL, NULL, 100000, NULL)'+
-'(050, ‘James’, ‘M’, 20000, 01)	OR	(020, NULL, NULL, 100000, NULL)<br><br>'+
-'Nothing.  When the DELETE FROM EMPLOYEE; task completes there are no data values left in the EMPLOYEE table. </p>';
-
+'<br>DELETE FROM EMPLOYEE;';
 var tutorial3='<b>SQL Tutorial 3: Dropping Tables</b><br>'+
 				'<p>Dropping Tables:  Should you ever need to get rid of a table you will use the DROP TABLE<br>'+
 				'command.  There are a few ways to implement the drop command that we should discuss'+

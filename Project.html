@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script>
+  function getUrlVars() {
+                var vars = {};
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                vars[key] = value;
+                });
+                return vars;
+            }
+  var username = getUrlVars()["userid"];
+  var point = getUrlVars()["Point"];
+  var project = getUrlVars()["Project"];
+
+  $(document).ready( function(){
+    $("#Submit").click(function(){
+        var name = $("#Project").val();
+        var tutorial = $("input[name='Tutorial']:checked").val();
+        var Dificulty=$("input[name='level']:checked").val();
+        if(name === "" || tutorial === undefined || Dificulty === undefined){
+            if(name === ""){
+                alert("Please fills the project name");
+            }
+            if(tutorial === undefined){
+                alert("Please choosing the tutorial");
+            }
+            if(Dificulty === undefined){
+                alert("Please choosing the tutorial");
+            }
+        }
+        if(name !== "" || tutorial !== undefined || Dificulty !== undefined){
+            $.post('http://localhost:5656/Project',
+            {username:username,projectName:name,tut:tutorial,level:Dificulty},
+            function(data) {
+                if(data === "fail"){
+                    alert("The name of project exists. Please choose another name !");
+                }else if(data == "success") {
+                    alert("Project is created !")
+                    window.location="http://localhost:5656/?#";
+                }
+            });
+        }
+      });  
+  });
+</script>
+</head>
+<body>
+<div class="form-horizontal">
+    <div class="container">
+        
+        <!-- Form Name -->
+        <legend>Project</legend>
+        
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="textinput">Project Name</label>  
+          <div class="col-md-4">
+          <input id="Project" name="textinput" type="text" placeholder="Project Name " class="form-control input-md">
+          </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Tutorial</label>  
+            <div class="col-md-4">
+                    <input type = "radio" id = "Creation" value ="1" name="Tutorial">Table Creation<br>
+                    <input type = "radio" id = "Insert" value ="2"name="Tutorial">Insert<br>
+                    <input type = "radio" id = "Dropping" value ="3"name="Tutorial">Table Dropping<br>       
+            </div>
+        </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label" >Dificulty Level</label>  
+            <div class="col-md-4">
+                    <input type = "radio" id = "Easy" value ="1" name="level">Easy<br>
+                    <input type = "radio" id = "Medium" value ="2" name="level">Medium<br>
+                    <input type = "radio" id = "Hard" value ="3" name="level">Hard<br>       
+            </div>
+           </div>
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="singlebutton">Submit</label>
+            <div class="col-md-4">          
+            <button id="Submit" name="singlebutton" class="btn btn-success" >Submit</button>
+          </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

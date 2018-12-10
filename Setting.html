@@ -1,20 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 <script>
+  function getUrlVars() {
+                var vars = {};
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                vars[key] = value;
+                });
+                return vars;
+            }
+  var username = getUrlVars()["userid"];
+  var point = getUrlVars()["Point"];
+  var project = getUrlVars()["Project"];
+
   $(document).ready( function(){
-      var va = $("#textinput").val();
-      aler(va);
+    $("#Submit").click(function(){
+        var newID = $("#newID").val();
+        var newEmail = $("#newEmail").val();
+        var newPass = $("#passwordinput").val();
+        var confirmPass =$("#repeatpasswordinput").val();
+        var hasPass= false;
+        if(newPass !==""){
+          if(newPass !== confirmPass){
+            alert("Password doesn't match. Please try again");
+          }else{
+            $.post('http://localhost:5656/NewPass',
+                      {password:newPass,username:username},
+                        function(data){
+            });
+            AddID(newID);
+            AddEmail(newEmail);
+            window.location="http://localhost:5656/?#";
+          }
+        } else{
+          AddID(newID);
+          AddEmail(newEmail);
+          window.location="http://localhost:5656/?#";
+        }
+        
+        function AddID(newID) {
+            if(newID!==""){
+              oldusername= username;
+              username = newID;
+              
+              $.post("http://localhost:5656/NewID",
+                      {username:oldusername,user:newID},
+                      function(data){
+                               
+            });
+            }
+        }
+        function AddEmail(newEmail){
+          if(newEmail!==""){
+            $.post('http://localhost:5656/NewEmail',
+                    {email:newEmail,username:username},
+                    function(data){
+            });
+          }
+        }
+      });
+  
   });
 </script>
 </head>
 <body>
+    <div class="form-horizontal">
     <div class="container">
-        <form class="form-horizontal">
-        <fieldset>
         
         <!-- Form Name -->
         <legend>My Profile -> Account setting</legend>
@@ -23,7 +78,7 @@
         <div class="form-group">
           <label class="col-md-4 control-label" for="textinput">Change User ID</label>  
           <div class="col-md-4">
-          <input id="textinput" name="textinput" type="text" placeholder="your new ID " class="form-control input-md">
+          <input id="newID" name="textinput" type="text" placeholder="your new ID " class="form-control input-md">
           </div>
         </div>
         
@@ -31,7 +86,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="textinput">Change Email</label>  
             <div class="col-md-4">
-            <input id="textinput" name="textinput" type="text" placeholder="your new email " class="form-control input-md">
+            <input id="newEmail" name="textinput" type="text" placeholder="your new email " class="form-control input-md">
           </div>
           </div>
         
@@ -39,8 +94,7 @@
         <div class="form-group">
           <label class="col-md-4 control-label" for="passwordinput">new password</label>
           <div class="col-md-4">
-            <input id="passwordinput" name="passwordinput" type="password" placeholder="new password" class="form-control input-md">
-            
+            <input id="passwordinput" name="passwordinput" type="password" placeholder="new password" class="form-control input-md"> 
           </div>
         </div>
         
@@ -48,28 +102,25 @@
         <div class="form-group">
           <label class="col-md-4 control-label" for="passwordinput">repeat password</label>
           <div class="col-md-4">
-            <input id="passwordinput" name="passwordinput" type="password" placeholder="repeat password" class="form-control input-md">
-            
+            <input id="repeatpasswordinput" name="passwordinput" type="password" placeholder="repeat password" class="form-control input-md">
           </div>
         </div>
-        
         <!-- Button -->
         <div class="form-group">
-          <label class="col-md-4 control-label" for="singlebutton">Submit </label>
+          <label class="col-md-4 control-label" for="singlebutton">Submit The Changing</label>
           <div class="col-md-4">
-            <button id="singlebutton" name="singlebutton" class="btn btn-success">view</button>
+            <button id="Submit" name="singlebutton" class="btn btn-success">Submit</button>
           </div>
         </div>
         
         <!-- Button -->
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label class="col-md-4 control-label" for="singlebutton">Remove my account</label>
           <div class="col-md-4">
-            <button id="singlebutton" name="singlebutton" class="btn btn-danger">remove</button>
+            <button id="Delete" name="singlebutton" class="btn btn-danger">remove</button>
           </div>
+        </div>       -->
         </div>
-            
-        </fieldset>
-        </form>      
         </div>
 </body>
+</html>

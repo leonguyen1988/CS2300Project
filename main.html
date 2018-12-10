@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Main Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
@@ -133,7 +135,7 @@
     </div>
     <div class="navbar">
         <a href="#" onclick="changetoSetting();">Setting</a>
-        <a href="#news" onclick="changetoProject()">Project</a>
+        <a href="#" onclick="changetoProject()">Project</a>
         <div class="dropdown">
             <button class="dropbtn" onclick="myFunction()">Tutorial
             <i class="fa fa-caret-down"></i>
@@ -148,9 +150,8 @@
                 <button id="out" type="button" style="margin-left: 10px;">
                         <span class="glyphicon glyphicon-off"></span> Log out
                     </button> 
-            <button type="submit"><i class="fa fa-search"></i></button>
-            <input type="text" placeholder="Search.."> 
-            
+            <button type="submit" id="search" onclick="getTut()"><i class="fa fa-search"></i></button>
+            <input id="tags" type="text" placeholder="Search..">          
         </div>  
         
     </div>
@@ -162,6 +163,58 @@
     </div>
     <script>
             var click=null;
+
+            $(function(){
+                var Tutorial =[
+                    "Table Creation",
+                    "Insert",
+                    "Table Dropping"];
+                $("#tags").autocomplete({
+                    source:Tutorial
+                });
+            });
+            function getTut(){
+                
+                if($("#tags").val()==="Table Creation"){
+                    $("#Quiz").show();
+                    click = $("#create").attr("id");
+                    $.get('http://localhost:5656/tutorial',function(data){
+                        $(".Tutorial").empty();
+                        $(".Tutorial").append(tutorial1);
+                        $.post('http://localhost:5656/userTakeTutorial'
+                                ,{user:username,name:"Table Creation"}
+                                ,function(data){
+                                }
+                            );
+                    });
+                }
+                if($("#tags").val()==="Insert"){
+                    click =$("#Insert").attr("id");
+                    $("#Quiz").show();
+                    $.get('http://localhost:5656/tutorial',function(data){
+                        $(".Tutorial").empty();
+                        $(".Tutorial").append(tutorial2);
+                        $.post('http://localhost:5656/userTakeTutorial'
+                                ,{user:username,name:"Insert,Deletion,and Update"}
+                                ,function(data){
+                                }
+                            );
+                    });
+                }
+                if($("#tags").val()==="Table Dropping"){
+                    $("#Quiz").show();
+                    click=$("#Drop").attr("id");
+                    $.get('http://localhost:5656/tutorial',function(data){
+                    $(".Tutorial").empty();
+                    $(".Tutorial").append(tutorial3);
+                    $.post('http://localhost:5656/userTakeTutorial'
+                            ,{user:username,name:"Dropping Table"}
+                            ,function(data){
+                            }
+                        );
+                })
+                }
+            }
             /* When the user clicks on the button, 
             toggle between hiding and showing the dropdown content */
             
@@ -169,10 +222,14 @@
                 document.getElementById("myDropdown").classList.toggle("show");
             }
             function changetoSetting() {
-                window.location='http://localhost:5656/Setting';
+                window.location="http://localhost:5656/Setting?userid="+
+                                    username+
+                                        "&Point="+point+
+                                            "&Project="+project;
             }
             function changetoProject(){
-                
+                window.location="http://localhost:5656/Project?userid="+username+
+                                    "&Point="+point+"&Project="+project;
             }
             // Close the dropdown if the user clicks outside of it
             window.onclick = function(event) {
@@ -187,6 +244,7 @@
                         }
                     }
                 }
+
                 
                 if(event.target.matches("#create")){
                     $("#Quiz").show();
@@ -217,7 +275,6 @@
                 if(event.target.matches("#Drop")){
                     $("#Quiz").show();
                     click=$("#Drop").attr("id");
-                    alert(click);
                     $.get('http://localhost:5656/tutorial',function(data){
                     $(".Tutorial").empty();
                     $(".Tutorial").append(tutorial3);
@@ -231,11 +288,14 @@
 
                 if(event.target.matches('#Quiz')) {
                     if(click === "create"){
+                        alert("Welcome to the Quiz 1");
                         window.location="http://localhost:5656/Quiz1?userid="+username+"&Point="+point+"&Project="+project;
                     }  
                     else if(click ==="Insert"){
+                        alert("Welcome to the Quiz 2");
                         window.location="http://localhost:5656/Quiz2?userid="+username+"&Point="+point+"&Project="+project;
                     }else{
+                        alert("Welcome to the Quiz 3");
                         window.location="http://localhost:5656/Quiz3?userid="+username+"&Point="+point+"&Project="+project;
                     }
                 }

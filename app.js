@@ -1,6 +1,8 @@
 
 // Set up connection from NodeJS to MySQL and installing the Express lirbary
-
+/**
+ * Create link connect between backend and 
+ */
 var express = require('express');
 var bodyParser = require("body-parser");
 var app = express();
@@ -8,7 +10,6 @@ app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 var mysql = require('mysql');
-
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -16,18 +17,42 @@ var connection = mysql.createConnection({
   database : 'sql_learn'
   });
   
+/**
+ * Running the loging page for user to login to main paage
+ * Or if the user doesn't have acount, click create account
+ * By default, the account is: HuuTHo and password:a
+ */
 app.get('/',(req,res) =>{
    res.sendFile("index.html",{"root":__dirname});
 });
 
+/**
+ * This link will connect external js file which has all tutorial
+ * to the main page and wait for dynamically load it on the page
+ * PRE: Must store this file same directory with main page  
+ * POST:  Load data from tutorial1.js
+ */
 app.get('/tutorial',(req,res) =>{
     res.sendFile("tutorial1.js",{"root":__dirname});
 });
 
+/**
+ * This HTTP get will load the main page from root directory to website
+ * This main page will be a main working enviroment of the website
+ * Main page will have features and links connections to other pages 
+ * PRE: The link render has to match between apps and html file
+ * POST: The server will load the main page to front-end page  
+ */
 app.get('/main',(req,res) =>{
   res.sendFile("main.html",{"root":__dirname});
 });
 
+/**
+ * HTTP GET from Express will connect the quiz file to front end and load the page 
+ * when user request it
+ * PRE: link connection between front-end and this HTTP get 
+ * POST:
+ */
 app.get('/Quiz1',(req,res)=>{
   res.sendFile("Quiz1.html",{"root":__dirname});
 });
@@ -42,7 +67,11 @@ app.get('/Quiz3',(req,res)=>{
 
 app.get('/Setting',(req,res)=>{
   res.sendFile("Setting.html",{"root":__dirname});
-})
+});
+
+app.get('/Project',(req,res)=>{
+  res.sendFile("Project.html",{"root":__dirname});
+});
 
 /*
   Login Post Method will get username and pass and 
@@ -58,7 +87,9 @@ app.post('/login',(req,res)=>{
      
       if(rows.length !== 0){
         id =rows[0].UserID;
-          connection.query('SELECT SUM(CurrentPoint) as Points from learning where PublisherID='+String(id)+';',function(err,rows) {
+          connection.query('SELECT SUM(CurrentPoint)'+
+                            ' as Points from learning '+
+                            'where PublisherID='+String(id)+';',function(err,rows) {
               if (err) throw err;
               value.push(rows[0].Points);
               connection.query('SELECT Count(UID) as Project from project where UID='+String(id)+';',function(err,rows){
@@ -184,6 +215,73 @@ app.post('/create',(req,res)=>{
   
 });
 
+/**
+ * change UserId
+ */
+app.post("/NewID",(req,res)=>{
+  var username = req.body.username;
+  var newID = req.body.user;
+  connection.query('Update users SET username="'+newID+'" WHERE username="'+username+'";',
+            function(err,rows){
+              if(err) throw err;
+              res.json('done');
+            });
+});
+
+/**
+ * change Email
+ */
+app.post("/NewEmail",(req,res)=>{
+  var username = req.body.username;
+  var NewEmail = req.body.email;
+  connection.query('Update users SET Email="'+NewEmail+
+                      '" WHERE username="'+username+'";',
+            function(err,rows){
+              if(err) throw err;
+              
+            })
+});
+
+/**
+ * change PW
+ */
+app.post("/NewPass",(req,res)=>{
+  var username = req.body.username;
+  var newPass = req.body.password;
+  connection.query('Update users SET PW="'+newPass+
+                      '" WHERE username="'+username+'";',
+            function(err,rows){
+              if(err) throw err;
+            })
+});
+/**
+ * Add Project Name
+ */
+app.post("/Project",(req,res)=>{
+  var username = req.body.username;
+  var projectName= req.body.projectName;
+  var tutorialID = req.body.tut;
+  var levelID=req.body.level;
+  connection.query('SELECT UserID from users where username="'+username+'";',function(err,rows){
+    if(err) throw err;
+    var ID = rows[0].UserID;
+    connection.query('SELECT Count(ProjectName) as Count from Project where ProjectName="'+projectName+'";',
+    function(err,rows){
+      if(err) throw err;
+      if(rows[0].Count === 0){
+        connection.query('Insert into project values("'+projectName+
+        '",'+String(tutorialID)+
+        ','+String(levelID)+',0'+
+        ','+String(ID)+');',function(err,rows){
+            if(err) throw err;
+            res.json("success");
+        });
+      }else{
+        res.json("fail");
+      }
+    })
+      })
+});
 
 // 
 app.listen(5656,function (){
