@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+  $(document).ready( function(){
+      var va = $("#textinput").val();
+      aler(va);
+  });
+</script>
+</head>
+<body>
+    <div class="container">
+        <form class="form-horizontal">
+        <fieldset>
+        
+        <!-- Form Name -->
+        <legend>My Profile -> Account setting</legend>
+        
+        <!-- Text input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="textinput">Change User ID</label>  
+          <div class="col-md-4">
+          <input id="textinput" name="textinput" type="text" placeholder="your new ID " class="form-control input-md">
+          </div>
+        </div>
+        
+        <!-- New Email-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Change Email</label>  
+            <div class="col-md-4">
+            <input id="textinput" name="textinput" type="text" placeholder="your new email " class="form-control input-md">
+          </div>
+          </div>
+        
+        <!-- Password input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="passwordinput">new password</label>
+          <div class="col-md-4">
+            <input id="passwordinput" name="passwordinput" type="password" placeholder="new password" class="form-control input-md">
+            
+          </div>
+        </div>
+        
+        <!-- Password input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="passwordinput">repeat password</label>
+          <div class="col-md-4">
+            <input id="passwordinput" name="passwordinput" type="password" placeholder="repeat password" class="form-control input-md">
+            
+          </div>
+        </div>
+        
+        <!-- Button -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="singlebutton">Submit </label>
+          <div class="col-md-4">
+            <button id="singlebutton" name="singlebutton" class="btn btn-success">view</button>
+          </div>
+        </div>
+        
+        <!-- Button -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="singlebutton">Remove my account</label>
+          <div class="col-md-4">
+            <button id="singlebutton" name="singlebutton" class="btn btn-danger">remove</button>
+          </div>
+        </div>
+            
+        </fieldset>
+        </form>      
+        </div>
+</body>

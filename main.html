@@ -1,4 +1,4 @@
-<!doctype <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
     #UserName {
         margin-top: 10px;
@@ -103,25 +104,27 @@
 }
     </style>
     <script>
-        $(document).ready( function(){ 
-            function getUrlVars() {
+        function getUrlVars() {
                 var vars = {};
                 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
                 vars[key] = value;
                 });
                 return vars;
             }
-            var username = getUrlVars()["userid"];
-            $.post('http://localhost:5656/login',{user:username},function(value){
-                $('#UserName').data('info',"");
-                $('#UserName').filter(function(){
-                    return $(this).data('info')=="";
-                }).text('Welcome, '+username
-                +'\n. You currently have '+value[0]+(value[0]<= 1?' point':' points')+
-                ' and have '+value[1]+' project.'+
-                (value[1]===0?' Tries to go out your comfy zone.':'You are following your dream!'));
+        var username = getUrlVars()["userid"];
+        var point = getUrlVars()["Point"];
+        var project = getUrlVars()["Project"];
+        $(document).ready( function(){
+            
+            $("#Quiz").hide();
+            $('#UserName').data('info',"");
+            $('#UserName').filter(function(){
+                return $(this).data('info')=="";
+            }).text('Welcome, '+username
+            +'\n. You currently have '+point+(point<= 1?' point':' points')+
+            ' and have '+project+' project.'+
+            (project===0?' Try to go out your comfort zone.':'You are following your dream!'))
             });
-        });
     </script>
 </head>
 <body>
@@ -129,66 +132,119 @@
             <p id="UserName" class="background-color:" ></p>
     </div>
     <div class="navbar">
-        <a href="#home">Profile</a>
-        <a href="#news">Project</a>
+        <a href="#" onclick="changetoSetting();">Setting</a>
+        <a href="#news" onclick="changetoProject()">Project</a>
         <div class="dropdown">
             <button class="dropbtn" onclick="myFunction()">Tutorial
             <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content" id="myDropdown">
-            <a  id="create">Create Table</a>
+            <a  id="create"> Create Table</a>
             <a  id="Insert">Insert/Delete</a>
             <a  id="Drop">DropTable</a>
             </div>
         </div>
         <div class="search">         
+                <button id="out" type="button" style="margin-left: 10px;">
+                        <span class="glyphicon glyphicon-off"></span> Log out
+                    </button> 
             <button type="submit"><i class="fa fa-search"></i></button>
             <input type="text" placeholder="Search.."> 
-        </div>
+            
+        </div>  
         
     </div>
     <div class="Tutorial" style="background-color:rgba(124,252,0,0.5)"></div>
+    <div >
+        <button id="Quiz" type="button" class="btn btn-secondary btn-lg" style="padding:32px 28px;margin-left: 50%;">
+            <h3>Take Quiz</h3>
+        </button>
+    </div>
     <script>
+            var click=null;
             /* When the user clicks on the button, 
             toggle between hiding and showing the dropdown content */
+            
             function myFunction() {
                 document.getElementById("myDropdown").classList.toggle("show");
             }
-            
+            function changetoSetting() {
+                window.location='http://localhost:5656/Setting';
+            }
+            function changetoProject(){
+                
+            }
             // Close the dropdown if the user clicks outside of it
             window.onclick = function(event) {
                 if (!event.target.matches('.dropbtn')) {
             
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                var i;
-                for (i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
+                    var dropdowns = document.getElementsByClassName("dropdown-content");
+                    var i;
+                    for (i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                        }
                     }
                 }
-                }
-            }
-
-            $("#create").click(function(){
-                $.get('http://localhost:5656/tutorial',function(data){
-                    $(".Tutorial").empty();
-                    $(".Tutorial").append(tutorial1);
-                });
                 
-            });
-            $("#Insert").click(function(){
-                $.get('http://localhost:5656/tutorial',function(data){
+                if(event.target.matches("#create")){
+                    $("#Quiz").show();
+                    click = $("#create").attr("id");
+                    $.get('http://localhost:5656/tutorial',function(data){
+                        $(".Tutorial").empty();
+                        $(".Tutorial").append(tutorial1);
+                        $.post('http://localhost:5656/userTakeTutorial'
+                                ,{user:username,name:"Table Creation"}
+                                ,function(data){
+                                }
+                            );
+                    });
+                }
+                if(event.target.matches("#Insert")){
+                    click =$("#Insert").attr("id");
+                    $("#Quiz").show();
+                    $.get('http://localhost:5656/tutorial',function(data){
+                        $(".Tutorial").empty();
+                        $(".Tutorial").append(tutorial2);
+                        $.post('http://localhost:5656/userTakeTutorial'
+                                ,{user:username,name:"Insert,Deletion,and Update"}
+                                ,function(data){
+                                }
+                            );
+                    });
+                }
+                if(event.target.matches("#Drop")){
+                    $("#Quiz").show();
+                    click=$("#Drop").attr("id");
+                    alert(click);
+                    $.get('http://localhost:5656/tutorial',function(data){
                     $(".Tutorial").empty();
-                    $(".Tutorial").append(tutorial2);
-                });
-            })
-            $("#Drop").click(function(){
-                $.get('http://localhost:5656/tutorial',function(data){
-                    $(".Tutorial").empty();
-                    $(".Tutorial").append("Drop")
-                })  
-            });
+                    $(".Tutorial").append(tutorial3);
+                    $.post('http://localhost:5656/userTakeTutorial'
+                            ,{user:username,name:"Dropping Table"}
+                            ,function(data){
+                            }
+                        );
+                })
+                }
+
+                if(event.target.matches('#Quiz')) {
+                    if(click === "create"){
+                        window.location="http://localhost:5656/Quiz1?userid="+username+"&Point="+point+"&Project="+project;
+                    }  
+                    else if(click ==="Insert"){
+                        window.location="http://localhost:5656/Quiz2?userid="+username+"&Point="+point+"&Project="+project;
+                    }else{
+                        window.location="http://localhost:5656/Quiz3?userid="+username+"&Point="+point+"&Project="+project;
+                    }
+                }
+                
+                if(event.target.matches('#out')) {
+                    window.location="http://localhost:5656/?#";
+                }
+                
+            }
     </script>            
 </body>
 </html>

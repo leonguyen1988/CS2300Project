@@ -118,3 +118,17 @@ var tutorial2 = '<b>SQL Tutorial 2: Table Operations</b>'+
 '(050, ‘James’, ‘M’, 20000, 01)	OR	(020, NULL, NULL, 100000, NULL)<br><br>'+
 'Nothing.  When the DELETE FROM EMPLOYEE; task completes there are no data values left in the EMPLOYEE table. </p>';
 
+var tutorial3='<b>SQL Tutorial 3: Dropping Tables</b><br>'+
+				'<p>Dropping Tables:  Should you ever need to get rid of a table you will use the DROP TABLE<br>'+
+				'command.  There are a few ways to implement the drop command that we should discuss'+
+				'<br><h3>DROP TABLE EMPLOYEE RESTRICT;</h3><br>	'+
+				'When you add the RESTRICT tag to the end of your DROP command you are saying that the'+
+				'table can only be deleted if it is not being referenced.  You should do this to assure that you are'+
+				'not committing any referential integrity violations when you get rid of a table.<br>'+
+				'<h3> DROP TABLE EMPLOYEE CASCADE</h3><br>'+
+				'When you add CASCADE to the end of your DROP command'+
+				' then SQL will go through each table that is referencing a value'+
+				' in the table that is to be deleted and remove any tuple that references'+
+				' the data in the table you wish to remove.  This can be dangerous however,'+
+				' and you should be sure that this won’t cause any catastrophic failures'+
+				' in your database before using this deletion method.</p>';

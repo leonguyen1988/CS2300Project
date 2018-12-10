@@ -1,0 +1,168 @@
+<!doctype <!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <title>Main Page</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <style>
+
+    input {
+        margin-bottom: 20px;
+        display: block;
+    }
+    
+    #quiz {
+     margin-left: 0px;
+     background-color: rgba(124,252,0,0.5);
+     padding: 10px 20px 10px 20px;
+     width: 1294px;
+     border-radius: 0px;
+     float: center;
+    }
+ 
+    #button {
+        background: green;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        color: white;
+        font-size: 16px;
+        transition-duration: .5s;
+        margin-top: 15px;
+    }
+ 
+    #button:hover {
+        background: white;
+        border: 1px solid green;
+        color: black;
+        cursor: pointer;
+ 
+    }
+ 
+    #mc {
+        display: inline;
+    }
+
+    #UserName {
+       margin-top: 10px;
+       margin-bottom: 10px;
+       margin-right: 10px;
+       margin-left: 0px;
+   }
+   .navbar {
+       overflow: hidden;
+       background-color:gray;
+       font-family: Arial, Helvetica, sans-serif;
+   }
+   .navbar a:hover {
+   background-color:green;
+   color:white;
+   }
+
+   .navbar a {
+       float: left;
+       font-size: 16px;
+       color: white;
+       text-align: center;
+       padding: 14px 16px;
+       text-decoration: none;
+   }
+  
+   .navbar input[type=text] {
+   float: right;
+   padding: 6px;
+   border: none;
+   margin-top: 8px;
+   margin-right: 10px;
+   font-size: 17px;
+   width: 275px;
+   }
+   .navbar .search button {
+    float: right;
+    padding: 8px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    }
+</style>
+   <script>    
+        var correct = 0
+        function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+        });
+        return vars;
+        }
+        var username = getUrlVars()["userid"];
+        var TotalPoint=0;
+        var Project=0;
+       $(document).ready( function(){
+            $.post('http://localhost:5656/login',{user:username},function(value){
+                    $('#UserName').data('info',"");
+                    $('#UserName').filter(function(){
+                        return $(this).data('info')=="";
+                    }).text('Welcome to the quiz ,You are following your dream!');
+                });
+        $("#button").click(function(){
+            var question1 = document.quiz.question1.value;
+            if (question1 == "a") {
+                correct++;
+            }
+            document.getElementById("after_submit").style.visibility = "visible";
+            alert("You got " + correct + " points");           
+        });
+
+        $("#Home").click(function(){
+            $.post('http://localhost:5656/QuizPoint'
+                ,{user:username,tutorial:"Table Creation",point:correct}
+                , function(data){
+                    TotalPoint=data[0];
+                    Project=data[1];
+                    window.location='http://localhost:5656/main?userid='+
+                                    username+
+                                    '&Point='+TotalPoint+
+                                    '&Project='+Project;
+                }); 
+        });
+    });
+    </script>
+</head>
+<body>
+   <div class="container" >
+           <p id="UserName" class="background-color:" ></p>
+   </div>
+   <div class="navbar">
+       <a href="#" id="Home" >Home</a>
+       <a href="#news">Project</a>      
+       <div class="search">        
+           <button type="submit"><i class="fa fa-search"></i></button>
+           <input type="text" placeholder="Search..">
+       </div>
+      
+   </div>
+   <div class="Tutorial" style="background-color:rgba(124,252,0,0.5)"></div>
+<form id = "quiz" name = "quiz">
+   <p class = "questions"> Which tage refuses to let you delete a table unless no other table is referencing data whithin it?<br>
+            <br><b>RESTRICT OR CASCADE</b><br><br>
+          
+   <input type = "radio" id = "mc" name = "question1" value = "a"> RESTRICT<br>
+   <input type = "radio" id = "mc" name = "question1" value = "b"> CASCADE<br>
+   <input id = "button" type = "button" value = "Done">
+   </form>
+  
+   <div id = "after_submit">
+   <p id = "number_correct"></p>
+   <p id = "message"></p>
+   <!---<img id = "picture">--->
+   </div>
+</body>
+</html>
+
+

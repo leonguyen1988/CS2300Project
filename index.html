@@ -124,12 +124,12 @@ body {
         }
         if(user !=="" && pass !==""){
           $.post("http://localhost:5656/login",{user:user,password:pass},function(data){
-            if(data ===0 )
+            if(data[0] === undefined )
             {
                 alert("Account is not exit or password is wrong, please try again or create a new one.");
             }
             else{
-              window.location='http://localhost:5656/main?userid='+user;
+              window.location='http://localhost:5656/main?userid='+user+'&Point='+data[0]+'&Project='+data[1];
             }
         });
         }
