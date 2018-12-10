@@ -104,8 +104,13 @@ app.post('/login',(req,res)=>{
   });
 });
 
-/*
-*/
+/**
+ * HTTP POST will use to insert tutorial to learning table in database
+ * PRE : the connection link has to match between back-end and front-end page
+ *       username and tutorial Name has to be string type.
+ *        The function will check these parameters and if not match with database will return warning
+ * POST : INSERT new values to learning table 
+ */
 app.post('/userTakeTutorial',(req,res)=>{
    var user = req.body.user;
    var name = req.body.name;
@@ -129,6 +134,7 @@ app.post('/userTakeTutorial',(req,res)=>{
 /*
   This function will get userName,tutorial andpoint when user done with the quiz page
   Funtuon will insert  these parameters into the table learning
+  PRE: data must be pass fro
  */
 
 app.post('/QuizPoint',(req,res)=>{
